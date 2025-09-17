@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -37,37 +38,73 @@ import com.example.hello.ui.theme.HELLOTheme
         setContent {
             HELLOTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    var textoCuadro1 by remember{mutableStateOf("")}
-                    var textoCuadro2 by remember{mutableStateOf("")}
-                    var textoCuadro3 by remember{mutableStateOf("")}
+                    var OperacionT by remember { mutableStateOf("") }
+                    val scriptEngine = remember { ScriptEngineManager().getEngineByName("") } // O "js"
+
                     Column(modifier = Modifier.fillMaxWidth().padding( horizontal = 30.dp )) {
+                        TextField(value=OperacionT, onValueChange = {OperacionT=it}, modifier = Modifier.fillMaxWidth(), readOnly = true)
+                        Row {
+                            BotonCalc(Texto = "7", Modifier.padding(innerPadding),{
+                                TextoBoton->OperacionT+=TextoBoton
+                            })
+                            BotonCalc(Texto="8",Modifier.padding(innerPadding),{
+                                TextoBoton->OperacionT+=TextoBoton
+                            })
+                            BotonCalc(Texto="9",Modifier.padding(innerPadding),{
+                                TextoBoton->OperacionT+=TextoBoton
+                            })
+                            BotonCalc(Texto="+",Modifier.padding(innerPadding),{
+                                TextoBoton->OperacionT+=TextoBoton
+                            })
+                        }
+                    Column {
+                        Row {
+                            BotonCalc(Texto = "4",Modifier.padding(innerPadding),{
+                                TextoBoton->OperacionT+=TextoBoton
+                            })
+                            BotonCalc(Texto="5",Modifier.padding(innerPadding),{
+                                TextoBoton->OperacionT+=TextoBoton
+                            })
+                            BotonCalc(Texto="6",Modifier.padding(innerPadding),{
+                                TextoBoton->OperacionT+=TextoBoton
+                            })
+                            BotonCalc(Texto="-",Modifier.padding(innerPadding),{
+                                TextoBoton->OperacionT+=TextoBoton
+                            })
+                        }
+                    }
+                    Column{
+                        Row {
+                            BotonCalc(Texto = "1",Modifier.padding(innerPadding),{
+                                TextoBoton->OperacionT+=TextoBoton
+                            })
+                            BotonCalc(Texto="2",Modifier.padding(innerPadding),{
+                                TextoBoton->OperacionT+=TextoBoton
+                            })
+                            BotonCalc(Texto="3",Modifier.padding(innerPadding),{
+                                TextoBoton->OperacionT+=TextoBoton
+                            })
+                            BotonCalc(Texto="*",Modifier.padding(innerPadding),{
+                                TextoBoton->OperacionT+=TextoBoton
+                            })
+                        }
+                    }
+                    Column {
+                        Row {
+                            BotonCalc(Texto = "0",Modifier.padding(innerPadding),{
+                                TextoBoton->OperacionT+=TextoBoton
+                            })
+                            BotonCalc(Texto=".",Modifier.padding(innerPadding),{
+                                TextoBoton->OperacionT+=TextoBoton
+                            })
+                            BotonCalc(Texto="=",Modifier.padding(innerPadding),{
 
-                        Spacer(modifier = Modifier.width(16.dp).height(30.dp))
-                        Cuadro(
-                            modifier = Modifier.padding(innerPadding),
-                            Texto = textoCuadro1,
-                            OnTextoChange = { textoCuadro1 = it }
-
-                        )
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Cuadro(
-                            modifier = Modifier.padding(horizontal = 0.dp, vertical = 30.dp),
-                            Texto = textoCuadro2,
-                            OnTextoChange = { textoCuadro2 = it }
-                        )
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Button(
-                            onClick = {
-                                val suma = textoCuadro1.toInt() + textoCuadro2.toInt()
-                                textoCuadro3 = suma.toString()
-                            },
-                            content = { Text(text = "Suma") }
-                        )
-                        Cuadro(
-                            modifier = Modifier.padding(horizontal = 0.dp, vertical = 30.dp),
-                            Texto = textoCuadro3,
-                            OnTextoChange = { textoCuadro3 = it }
-                        )
+                            })
+                            BotonCalc(Texto="/",Modifier.padding(innerPadding),{
+                                TextoBoton->OperacionT+=TextoBoton
+                            })
+                        }
+                    }
                     }
                 }
             }
@@ -84,12 +121,15 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun Boton(modifier: Modifier = Modifier,Contenido:String){
-    Button(onClick = {
+fun BotonCalc(Texto: String,modifier: Modifier,OnBotonClick:(String)-> Unit){
+    Button(
+        onClick = { OnBotonClick(Texto)},
+        modifier =modifier,
+    ){
+        Text(text = Texto)
 
-    },  ) {
-        Text(Contenido)
     }
+
 }
  @Composable
  fun Cuadro(modifier: Modifier= Modifier,Texto: String,OnTextoChange:(String)-> Unit){
