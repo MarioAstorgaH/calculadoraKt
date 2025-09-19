@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -30,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.hello.ui.theme.HELLOTheme
+import net.objecthunter.exp4j.ExpressionBuilder
 
  class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,12 +39,15 @@ import com.example.hello.ui.theme.HELLOTheme
         enableEdgeToEdge()
         setContent {
             HELLOTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                Scaffold(modifier = Modifier.fillMaxSize(),) { innerPadding ->
                     var OperacionT by remember { mutableStateOf("") }
-                    val scriptEngine = remember { ScriptEngineManager().getEngineByName("") } // O "js"
-
-                    Column(modifier = Modifier.fillMaxWidth().padding( horizontal = 30.dp )) {
-                        TextField(value=OperacionT, onValueChange = {OperacionT=it}, modifier = Modifier.fillMaxWidth(), readOnly = true)
+                    var Expresion by remember { mutableStateOf("") }
+                    Column(modifier = Modifier.fillMaxWidth().padding( top = 30.dp, start = 60.dp),verticalArrangement = Arrangement.Bottom) {
+                       Row (modifier = Modifier.fillMaxWidth()) {
+                           TextField(value=OperacionT, onValueChange = {OperacionT=it}, readOnly = true)
+                       }
+                    }
+                    Column(modifier = Modifier.fillMaxWidth().padding(  start = 60.dp),verticalArrangement = Arrangement.Bottom) {
                         Row {
                             BotonCalc(Texto = "7", Modifier.padding(innerPadding),{
                                 TextoBoton->OperacionT+=TextoBoton
@@ -56,8 +61,9 @@ import com.example.hello.ui.theme.HELLOTheme
                             BotonCalc(Texto="+",Modifier.padding(innerPadding),{
                                 TextoBoton->OperacionT+=TextoBoton
                             })
+
                         }
-                    Column {
+                    Column (modifier = Modifier.fillMaxWidth().padding(start = 60.dp),verticalArrangement = Arrangement.Bottom){
                         Row {
                             BotonCalc(Texto = "4",Modifier.padding(innerPadding),{
                                 TextoBoton->OperacionT+=TextoBoton
@@ -73,7 +79,7 @@ import com.example.hello.ui.theme.HELLOTheme
                             })
                         }
                     }
-                    Column{
+                    Column(modifier = Modifier.fillMaxWidth().padding( start = 60.dp),verticalArrangement = Arrangement.Bottom){
                         Row {
                             BotonCalc(Texto = "1",Modifier.padding(innerPadding),{
                                 TextoBoton->OperacionT+=TextoBoton
@@ -89,8 +95,11 @@ import com.example.hello.ui.theme.HELLOTheme
                             })
                         }
                     }
-                    Column {
+                    Column(modifier = Modifier.fillMaxWidth().padding( start = 60.dp ),verticalArrangement = Arrangement.Bottom) {
                         Row {
+                            BotonCalc(Texto = "C",Modifier.padding(innerPadding),{
+                                OperacionT=""
+                            })
                             BotonCalc(Texto = "0",Modifier.padding(innerPadding),{
                                 TextoBoton->OperacionT+=TextoBoton
                             })
@@ -98,7 +107,13 @@ import com.example.hello.ui.theme.HELLOTheme
                                 TextoBoton->OperacionT+=TextoBoton
                             })
                             BotonCalc(Texto="=",Modifier.padding(innerPadding),{
-
+                                try{
+                                    val exp= ExpressionBuilder(OperacionT).build()
+                                    val eval=exp.evaluate()
+                                    OperacionT=eval.toString()
+                                }catch (e:Exception){
+                                    OperacionT="Error"
+                                }
                             })
                             BotonCalc(Texto="/",Modifier.padding(innerPadding),{
                                 TextoBoton->OperacionT+=TextoBoton
